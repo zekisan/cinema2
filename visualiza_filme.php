@@ -1,10 +1,13 @@
-<?php include('db/filmes_db.php'); ?>
-<?php include('db/generos_db.php'); ?>
 <?php include('cabecalho.php'); ?>
 <?php include('navbar_admin.php'); ?>
 
-<?php $filme = buscaFilmePorId($_GET['id']); ?>
-<?php $genero = buscaGeneroPorId($filme->getGenero()); ?>
+<?php 
+$filmes_db = new FilmesDB();
+$generos_db = new GenerosDB();
+$filme = $filmes_db->buscaFilmePorId($_GET['id']);
+$genero = $generos_db->buscaGeneroPorId($filme->getGenero()); 
+
+?>
 
 <h2><?php echo $filme->getTitulo(); ?></h2>
 <div class="col-md-6">

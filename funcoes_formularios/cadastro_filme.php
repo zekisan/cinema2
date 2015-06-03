@@ -1,3 +1,16 @@
+<?php 
+function __autoload($arquivo)
+{
+	if (file_exists("../classes/".$arquivo.".php")) {
+		include_once("../classes/".$arquivo.".php");
+	}else if(file_exists("../db/".$arquivo.".php")){
+		include_once("../db/".$arquivo.".php");
+	}
+	else{
+		throw new Exception('Unable to load class named $arquivo');
+	}
+}
+?>
 <?php
 $cartaz = fopen($_FILES['cartaz']['tmp_name'], 'r');
 $data = fread($cartaz, filesize($_FILES['cartaz']['tmp_name']));

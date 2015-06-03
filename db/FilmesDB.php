@@ -1,7 +1,7 @@
 <?php 
 class FilmesDB {
   function cadastraFilme($titulo, $data_estreia, $data_termino, $genero, $cartaz, $duracao, $ator_principal, $atriz_principal, $ator_coadjuvante, $atriz_coadjuvante){
-    //$con = abreConexao();
+
   	$banco = new Banco();
   	$banco = $banco->getPdoConn();
   	$banco->beginTransaction();
@@ -32,51 +32,48 @@ class FilmesDB {
   		echo '{msg : "Erro 1"}';
   		exit(0);
   	}
-  	
-  	
-  	
-    //$sql = "INSERT INTO filmes(titulo, data_estreia, data_termino, genero_id, cartaz, duracao, ator_principal, atriz_principal, ator_coadjuvante, atriz_coadjuvante) VALUES (?, STR_TO_DATE(?, '%d/%m/%Y'), STR_TO_DATE(?, '%d/%m/%Y'), ?, ?, ?, ?, ?, ?, ?)";
-    
-    /*if($query = $con->prepare($sql)){
-      $query->bind_param("sssibsssss", $titulo, $data_estreia, $data_termino,
-        $genero, mysql_escape_string(file_get_contents($cartaz)), $duracao, $ator_principal,
-        $atriz_principal, $ator_coadjuvante, $atriz_coadjuvante);
-      $query->execute();
-      echo $con->error;
-    }else{
-      var_dump($con->error);
-    }*/
 
-    //fechaConexao();
-    //return $query->insert_id;
     $ultimo_id = $banco->lastInsertId(); 
   	$banco->commit();
     return $ultimo_id;
   }
 
   function buscaTodosFilmes(){
-    $con = abreConexao();
+    $banco = new Banco();
     $filmes = [];
 
-    $resultados = $con->query('SELECT * FROM filmes');
-
-    while ($linha = $resultados->fetch_assoc()) {
-      array_push($filmes, populaFilme($linha));
+    $stmt = $banco->getPdoConn()->prepare("SELECT * FROM filmes WHERE id = ".$id);
+    
+    if (!$stmt->execute())
+    	throw new ErrorException('Erro na consulta ao banco.');
+    
+    if ($stmt->rowCount() < 1)
+    	return FALSE;
+    
+    $filmes_db = $stmt->fetchAll();
+    for ($i = 0; $i < sizeof($filmes_db); $i++) {
+    	array_push($filme, $this->$this->populaFilme($filmes[$i]));
     }
-    fechaConexao();
+    $stmt->closeCursor();
     return $filmes;
   }
 
   function buscaFilmePorId($id){
-    $con = abreConexao();
+    $banco = new Banco();
     $filme = null;
 
-    $resultados = $con->query("SELECT * FROM filmes WHERE id = ".$id);
-
-    while ($linha = $resultados->fetch_assoc()) {
-      $filme = populaFilme($linha);
-    }
-    fechaConexao();
+    $stmt = $banco->getPdoConn()->prepare("SELECT * FROM filmes WHERE id = ".$id);
+    
+    if (!$stmt->execute())
+    	throw new ErrorException('Erro na consulta ao banco.');
+    
+    if ($stmt->rowCount() < 1)
+    	return FALSE;
+    
+    $filmes = $stmt->fetchAll();
+   	$filme = $this->populaFilme($filmes[0]);
+    $stmt->closeCursor();
+    
     return $filme;
   }
 
