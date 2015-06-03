@@ -1,9 +1,5 @@
 <?php 
-class GenerosDB{
-	
-	function __construct() {
-		echo 'Class GenerosDB loaded successfully <br />';
-	}	
+class GenerosDB{	
 	
   function buscaTodosGeneros(){
     //$con = abreConexao();
