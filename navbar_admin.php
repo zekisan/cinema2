@@ -1,3 +1,8 @@
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#menu li").removeClass("active");
+})
+</script>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -11,11 +16,11 @@
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Usuários <span class="sr-only">(current)</span></a></li>
-        <li><a href="filmes.php">Filmes</a></li>
-        <li><a href="#">Sessões</a></li>
-        <li><a href="#">Relatórios</a></li>
+      <ul class="nav navbar-nav" id="menu">
+        <li id="usuarios"><a href="usuarios.php">Usuários <span class="sr-only">(current)</span></a></li>
+        <li id="filmes" ><a href="filmes.php">Filmes</a></li>
+        <li id="sessoes" ><a href="sessoes.php">Sessões</a></li>
+        <li id="relatorios" ><a href="#">Relatórios</a></li>
       </ul>
     </div>
   </div>

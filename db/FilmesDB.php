@@ -42,7 +42,7 @@ class FilmesDB {
     $banco = new Banco();
     $filmes = [];
 
-    $stmt = $banco->getPdoConn()->prepare("SELECT * FROM filmes WHERE id = ".$id);
+    $stmt = $banco->getPdoConn()->prepare("SELECT * FROM filmes");
     
     if (!$stmt->execute())
     	throw new ErrorException('Erro na consulta ao banco.');
@@ -52,10 +52,30 @@ class FilmesDB {
     
     $filmes_db = $stmt->fetchAll();
     for ($i = 0; $i < sizeof($filmes_db); $i++) {
-    	array_push($filme, $this->$this->populaFilme($filmes[$i]));
+    	array_push($filmes, $this->populaFilme($filmes_db[$i]));
     }
     $stmt->closeCursor();
     return $filmes;
+  }
+  
+  function buscaTodosFilmesPorId($id){
+  	$banco = new Banco();
+  	$filmes = [];
+  
+  	$stmt = $banco->getPdoConn()->prepare("SELECT * FROM filmes WHERE id = ".$id);
+  
+  	if (!$stmt->execute())
+  		throw new ErrorException('Erro na consulta ao banco.');
+  
+  	if ($stmt->rowCount() < 1)
+  		return FALSE;
+  
+  	$filmes_db = $stmt->fetchAll();
+  	for ($i = 0; $i < sizeof($filmes_db); $i++) {
+  		array_push($filmes, $this->populaFilme($filmes_db[$i]));
+  	}
+  	$stmt->closeCursor();
+  	return $filmes;
   }
 
   function buscaFilmePorId($id){

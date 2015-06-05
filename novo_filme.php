@@ -1,6 +1,9 @@
 <?php include('cabecalho.php'); ?>
 <?php include('navbar_admin.php'); ?>
 <script>
+	$(document).ready(function () {
+    	$('#filmes').addClass('active');
+	})
   $(function() {
     $( "#data_estreia, #data_termino" ).datepicker({
         dateFormat: 'dd/mm/yy',
@@ -21,7 +24,7 @@
     };
   };
 </script>
-<h1>Novo Filme</h1>
+<h2>Novo Filme</h2>
 <div class="col-md-8">
   <form enctype="multipart/form-data" method="POST" action="funcoes_formularios/cadastro_filme.php">
     <div class="row">

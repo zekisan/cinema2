@@ -2,25 +2,29 @@
 <?php include('navbar_admin.php'); ?>
 <script type="text/javascript">
 	$(document).ready(function () {
-	    $('#filmes').addClass('active');
+	    $('#sessoes').addClass('active');
 	})
 </script>
-<h2>Filmes</h2>
-<a class="btn btn-primary" href="novo_filme.php" role="button">Novo Filme</a>
+<h2>Sessões</h2>
+<a class="btn btn-primary" href="nova_sessao.php" role="button">Nova Sessao</a>
+
+<?php 
+	$filmes_db = new FilmesDB();
+	
+	if ($filmes = $filmes_db->buscaTodosFilmes()){
+	?>
 <table class="table table-hover">
   <thead>
-  	<th>Título</th>
+  	<th>Filme</th>
   	<th>Data estréia</th>
   	<th>Data término</th>
   </thead>
   <tbody>
-  	<?php 
-  		$filmes_db = new FilmesDB();
-		$filmes = $filmes_db->buscaTodosFilmes();
+  	<?php
 		for ($i = 0; $i < sizeof($filmes); $i++){
 			echo "<tr>";
 			echo "<td>";
-			echo "<a href='/cinema2/visualiza_filme.php?id=".$filmes[$i]->getId()."'>";
+			echo "<a href='/cinema2/visualiza_sessoes.php?filme_id=".$filmes[$i]->getId()."'>";
 			echo $filmes[$i]->getTitulo();
 			echo "</a>";
 			echo "</td>";
@@ -35,4 +39,5 @@
   	?>
   </tbody>
 </table>
+<?php } ?>
 <?php include('rodape.php'); ?>

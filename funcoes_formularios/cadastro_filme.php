@@ -10,8 +10,7 @@ function __autoload($arquivo)
 		throw new Exception('Unable to load class named $arquivo');
 	}
 }
-?>
-<?php
+
 $cartaz = fopen($_FILES['cartaz']['tmp_name'], 'r');
 $data = fread($cartaz, filesize($_FILES['cartaz']['tmp_name']));
 $data = addslashes($data);
