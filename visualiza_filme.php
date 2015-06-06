@@ -1,4 +1,4 @@
-<?php include('cabecalho.php'); ?>
+<?php include('cabecalho_admin.php'); ?>
 <?php include('navbar_admin.php'); ?>
 
 <?php 
@@ -21,7 +21,7 @@ $genero = $generos_db->buscaGeneroPorId($filme->getGenero());
   <p><b>Atriz coadjuvante: </b><?php echo $filme->getAtrizCoadjuvante(); ?></p>
 </div>
 <div class="col-md-6">
-  <?php echo $filme->getCartaz(); ?>
+  <img src="imagens/<?php echo $filme->getCartaz(); ?>" />
 </div>
 
 <?php include('rodape.php'); ?>

@@ -1,4 +1,4 @@
-<?php include('cabecalho.php'); ?>
+<?php include('cabecalho_admin.php'); ?>
 <?php include('navbar_admin.php'); ?>
 <script type="text/javascript">
 	$(document).ready(function () {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 function __autoload($arquivo)
 {
 	if (file_exists("classes/".$arquivo.".php")) {
@@ -9,7 +9,13 @@ function __autoload($arquivo)
 	else{
 		throw new Exception('Unable to load class named $arquivo');
 	}
+	date_default_timezone_get();
 }
+
+if(!SessaoSite::isLogado()){
+	header('location:index.php');
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,7 +24,7 @@ function __autoload($arquivo)
     <meta http-equiv="Content-Type" context="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="">
-    <title>Cinema</title>
+    <title>Cinema - Bilheteria</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="js/jqueryui/jquery-ui.min.css" rel="stylesheet">
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>

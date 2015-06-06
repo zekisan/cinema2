@@ -67,6 +67,26 @@ class UsuarioDB {
 		return $ultimo_id;
 	}
 	
+	function login($usuario, $senha){
+		$banco = new Banco();
+		
+		$stmt = $banco->getPdoConn()->prepare("SELECT u.id as id, u.nome as nome, u.login as login, u.senha as senha, p.id as papel_id, p.nome as papel FROM usuarios u INNER JOIN papeis p ON (p.id = u.papel_id) WHERE u.login = '".$usuario."' AND u.senha = '".$senha."'");
+		
+		if (!$stmt->execute())
+			throw new ErrorException('Erro na consulta ao banco.');
+		
+		if ($stmt->rowCount() < 1)
+			return FALSE;
+		
+		$usuarios_db = $stmt->fetchAll();
+		$usuario_logado = $this->populaUsuario($usuarios_db[0]);
+		$stmt->closeCursor();
+		
+		SessaoSite::registrarSessao($usuario_logado);
+		
+		return TRUE;
+	}
+	
 	function populaUsuario($linha){
 		return new Usuario($linha['id'], $linha['nome'],
 				new Papel($linha['papel_id'], $linha['papel']), $linha['login'], $linha['senha']);

@@ -1,4 +1,4 @@
-<?php include('cabecalho.php'); ?>
+<?php include('cabecalho_admin.php'); ?>
 <?php include('navbar_admin.php'); ?>
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -26,19 +26,19 @@ if (!empty($_GET)) {
 		for ($i = 0; $i < sizeof($sessoes); $i++) {
 			echo "<tr>";
 				echo "<td>";
-				echo $sessoes[$i]['titulo_filme'];
+				echo $sessoes[$i]->getFilme()->getTitulo();
 				echo "</td>";
 				echo "<td>";
-				echo  date("d/m/Y", strtotime($sessoes[$i]['data_se']));
+				echo  date("d/m/Y", strtotime($sessoes[$i]->getDataSessao()));
 				echo "</td>";
 				echo "<td>";
-				echo $sessoes[$i]['horario'];
+				echo $sessoes[$i]->getHorario();
 				echo "</td>";
 				echo "<td>";
-				echo $sessoes[$i]['ingressos'];
+				echo $sessoes[$i]->getQtdIngressos();
 				echo "</td>";
 				echo "<td>";
-				echo $sessoes[$i]['sala'];
+				echo $sessoes[$i]->getSala()->getNome();
 				echo "</td>";
 			echo "</tr>";
 		}//end for

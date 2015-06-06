@@ -69,14 +69,13 @@ function __autoload($arquivo)
 </head>
 <body>
   <div class="container">
-  	<form class="form-login">
+  	<form class="form-login" method="POST" action="funcoes_formularios/login.php">
         <h2 class="form-login-cabecalho">Login</h2>
         <label for="usuario" class="sr-only">Usuário</label>
-        <input type="text" id="usuario" class="form-control" placeholder="Usuário" required="" autofocus="">
+        <input type="text" id="usuario" class="form-control" placeholder="Usuário" required="" autofocus="" name="usuario">
         <label for="senha" class="sr-only">Senha</label>
-        <input type="password" id="senha" class="form-control" placeholder="Senha" required="">
+        <input type="password" id="senha" class="form-control" placeholder="Senha" required="" name="senha">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
-        <a class="btn btn-success btn-block" href="novo_filme.php" role="button">Cadastre-se</a>
       </form>
   </div>
  </body>

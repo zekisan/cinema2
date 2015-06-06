@@ -14,7 +14,10 @@ class SalasDB {
 		if ($stmt->rowCount() < 1)
 			return FALSE;
 	
-		$salas = $stmt->fetchAll();
+		$salas_db = $stmt->fetchAll();
+		for ($i = 0; $i < sizeof($salas_db); $i++) {
+			array_push($salas, $this->populaSala($salas_db[$i]));
+		}
 		$stmt->closeCursor();
 	
 		return $salas;
@@ -32,14 +35,15 @@ class SalasDB {
 		if ($stmt->rowCount() < 1)
 			return FALSE;
 	
-		$sala = $this->populaSala($stmt->fetchAll());
+		$salas_db = $stmt->fetchAll();
+		$sala = $this->populaSala($salas_db[0]);
 		$stmt->closeCursor();
 	
 		return $sala;
 	}
 	
 	function populaSala($linha){
-		return new Sala($linha[0]['id'], $linha[0]['nome']);
+		return new Sala($linha['id'], $linha['nome']);
 	}
 	
 }
