@@ -22,7 +22,9 @@
   	for ($i = 0; $i < sizeof($usuarios); $i++) {
   		echo "<tr>";
   		echo "<td>";
+  		echo "<a href='visualiza_usuario.php?id=".$usuarios[$i]->getId()."'>";
   		echo $usuarios[$i]->getNome();
+  		echo "</a>";
   		echo "</td>";
   		echo "<td>";
   		echo $usuarios[$i]->getPapel()->getNome();
