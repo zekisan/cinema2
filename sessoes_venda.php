@@ -3,6 +3,7 @@
 <script>
 $(function() {
     $( "#data_sessao" ).datepicker({
+    	minDate: 0,
         dateFormat: 'dd/mm/yy',
         dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
         dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
@@ -47,17 +48,22 @@ if(isset($_GET['data_sessao'])){
 		?>
 		<div class="col-md-4">
 			<table class="table table-hover">
-				<?php 
-				
+				<?php
 					for ($i = 0; $i < sizeof($sessoes); $i++) {
 						echo "<tr>";
 						echo "<td>";
-						echo $sessoes[$i]->getHorario();
+						echo $sessoes[$i]->getSala()->getNome();
+						echo "</td>";
+						echo "<td>";
+						if ($sessoes[$i]->getDataSessao() == date('Y-m-d') && (int)($sessoes[$i]->getHorario()) < (int)(date('H:i:s'))){
+							echo $sessoes[$i]->getHorario();
+						}else{
+							echo "<a href='venda.php?sessao_id=".$sessoes[$i]->getId()."'>".$sessoes[$i]->getHorario()."</a>";
+						}
 						echo "<span class='badge pull-right'>". (200 - $sessoes[$i]->getQtdIngressos()) ."</span>";
 						echo "</td>";
 						echo "</tr>";
 					}
-				
 				?>
 			</table>
 		</div>

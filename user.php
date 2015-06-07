@@ -1,6 +1,6 @@
 <?php include('cabecalho_user.php'); ?>
 <?php include('navbar_user.php'); ?>
-
+<?php include('mensagem.php'); ?>
 <h2>Filmes em Cartaz</h2>
 <?php 
 
@@ -16,6 +16,7 @@ if ($filmes = $filmes_db->buscaFilmesEmCartaz()){
 		echo "<p>";
 		echo "<a href='sessoes_venda.php?data_sessao=".date('d/m/Y')."&filme_id=".$filmes[$i]->getId()."'>".$filmes[$i]->getTitulo()."</a>";
 		echo "</p>";
+		echo "</div>";
 	}
 ?>
 </div>

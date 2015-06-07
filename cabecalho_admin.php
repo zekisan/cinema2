@@ -12,7 +12,7 @@ function __autoload($arquivo)
 	date_default_timezone_get();
 }
 
-if(!SessaoSite::isLogado() || !SessaoSite::getUsuario()->getPapel()->getNome() == 'Administrador'){
+if(!SessaoSite::isLogado() || SessaoSite::getUsuario()->getPapel()->getNome() != 'Administrador'){
 	header('location:index.php');
 }
 

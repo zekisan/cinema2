@@ -10,6 +10,18 @@ function __autoload($arquivo)
 		throw new Exception('Unable to load class named $arquivo');
 	}
 }
+
+if (SessaoSite::isLogado()){
+	switch (SessaoSite::getUsuario()->getPapel()->getNome()) {
+		case 'Administrador':
+		header('location:admin.php');
+		break;
+		case 'Usuário':
+		header('location:user.php');
+		break;
+	}
+}
+
 ?>
 <!DOCTYPE html>
 <html>

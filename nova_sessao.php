@@ -32,8 +32,8 @@
 					        <?php $salas_db = new SalasDB(); ?>
 					        <?php if ($salas = $salas_db->buscaTodasSalas()) { ?>
 					        <?php for ($i=0; $i < sizeof($salas); $i++) { 
-					           echo "<option value='".$salas[$i]['id']."'>";
-					           echo $salas[$i]['nome'];
+					           echo "<option value='".$salas[$i]->getId()."'>";
+					           echo $salas[$i]->getNome();
 					           echo "</option>";
 					        } 
 							}?>

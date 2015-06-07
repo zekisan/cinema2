@@ -4,7 +4,7 @@ class SessaoDB {
 		$banco = new Banco();
 		$sessoes = [];
 	
-		$stmt = $banco->getPdoConn()->prepare("SELECT s.id as sessao_id, f.id as filme_id, f.titulo as titulo_filme, s.data_sessao as data_se, s.horario as horario, s.qtd_ingressos as ingressos, sa.id as sala_id, sa.nome as sala  FROM sessoes s INNER JOIN salas sa ON (s.sala_id = sa.id) INNER JOIN filmes f ON (s.filme_id = f.id) WHERE f.id = ".$filme_id." ORDER BY sa.id");
+		$stmt = $banco->getPdoConn()->prepare("SELECT s.id as sessao_id, f.id as filme_id, f.titulo as titulo_filme, s.data_sessao as data_se, s.horario as horario, s.qtd_ingressos as ingressos, sa.id as sala_id, sa.nome as sala  FROM sessoes s INNER JOIN salas sa ON (s.sala_id = sa.id) INNER JOIN filmes f ON (s.filme_id = f.id) WHERE f.id = ".$filme_id." ORDER BY sa.id, s.data_sessao, s.horario");
 	
 		if (!$stmt->execute())
 			throw new ErrorException('Erro na consulta ao banco.');
@@ -19,6 +19,25 @@ class SessaoDB {
 		$stmt->closeCursor();
 	
 		return $sessoes;
+	}
+	
+	function buscaSessaoPorId($sessao_id){
+		$banco = new Banco();
+		$sessao = [];
+		
+		$stmt = $banco->getPdoConn()->prepare("SELECT s.id as sessao_id, f.id as filme_id, f.titulo as titulo_filme, s.data_sessao as data_se, s.horario as horario, s.qtd_ingressos as ingressos, sa.id as sala_id, sa.nome as sala  FROM sessoes s INNER JOIN salas sa ON (s.sala_id = sa.id) INNER JOIN filmes f ON (s.filme_id = f.id) WHERE s.id = ".$sessao_id." ORDER BY sa.id, s.data_sessao, s.horario");
+		
+		if (!$stmt->execute())
+			throw new ErrorException('Erro na consulta ao banco.');
+		
+		if ($stmt->rowCount() < 1)
+			return FALSE;
+		
+		$sessoes_db = $stmt->fetchAll();
+		$sessao = $this->populaSessao($sessoes_db[0]);
+		$stmt->closeCursor();
+		
+		return $sessao;
 	}
 	
 	function buscaTodasSessoesPorFilmeData($filme_id, $data_sessao){
@@ -105,6 +124,29 @@ class SessaoDB {
 		}
 		
 		$banco->commit();
+		return TRUE;
+	}
+	
+	function vendaIngressos($sessao_id, $qtd_ingressos, $qtd_atual){
+		$banco = new Banco();
+		$banco = $banco->getPdoConn();
+		$banco->beginTransaction();
+		
+		$stmt = $banco->prepare("
+  			UPDATE sessoes
+  			SET qtd_ingressos = :qtd_ingressos WHERE id = :id");
+		 
+		$stmt->bindValue(':qtd_ingressos', ($qtd_atual + $qtd_ingressos), PDO::PARAM_INT);
+		$stmt->bindValue(':id', $sessao_id, PDO::PARAM_INT);
+		
+		if (!$stmt->execute()) {
+			$banco->rollBack();
+			echo '{msg : "Erro 1"}';
+			exit(0);
+		}
+		
+		$banco->commit();
+		SessaoSite::setMensagem(array('tipo' => 'success', 'msg' => 'Venda efetuada com sucesso!'));
 		return TRUE;
 	}
 	
