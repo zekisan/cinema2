@@ -70,6 +70,44 @@ class SessaoDB {
 		}//end if
 	}
 	
+	function jaPassou($filme_id){
+		$banco = new Banco();
+		
+		$stmt = $banco->getPdoConn()->prepare("SELECT *  FROM sessoes WHERE filme_id = ".$filme_id." AND data_sessao <= CURDATE()");
+		
+		if (!$stmt->execute())
+			throw new ErrorException('Erro na consulta ao banco.');
+		
+		if ($stmt->rowCount() < 1){
+			$stmt->closeCursor();
+			return FALSE;
+		}
+		else{
+			$stmt->closeCursor();
+			SessaoSite::setMensagem(array('tipo' => 'danger', 'msg' => 'Não é possível excluir um filme que já foi exibido.'));
+			return TRUE;
+		}
+	}
+	
+	function excluiSessaoPorFilme($filme_id){
+		$banco = new Banco();
+		$banco = $banco->getPdoConn();
+		$banco->beginTransaction();
+			
+		$stmt = $banco->prepare("DELETE FROM sessoes WHERE filme_id = :filme_id");
+		
+		$stmt->bindValue(':filme_id', $filme_id, PDO::PARAM_INT);
+			
+		if (!$stmt->execute()) {
+			$banco->rollBack();
+			echo '{msg : "Erro 1"}';
+			exit(0);
+		}
+		
+		$banco->commit();
+		return TRUE;
+	}
+	
 	function populaSessao($linha){
 		return new Sessao($linha['sessao_id'], $linha['horario'], $linha['data_se'], 
 				$linha['ingressos'], new Filme($linha['filme_id'], $linha['titulo_filme'], null, null, null, null, null, null, null, null, null), 

@@ -13,7 +13,7 @@ function __autoload($arquivo)
 
 $usuario_db = new UsuarioDB();
 
-$id = $usuario_db->insereUsuario($_POST['nome'], $_POST['papel_id'], $_POST['login'], $_POST['senha']);
-
-header('location:../visualiza_usuario.php?id='.$id);
+if ($usuario_db->excluirUsuario((int)$_POST['id_usuario'])){
+	header('location:../usuarios.php');
+}
 ?>

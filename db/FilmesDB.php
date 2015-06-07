@@ -35,6 +35,7 @@ class FilmesDB {
 
     $ultimo_id = $banco->lastInsertId(); 
   	$banco->commit();
+  	SessaoSite::setMensagem(array('tipo' => 'success', 'msg' => 'Filme cadastrado com sucesso!'));
     return $ultimo_id;
   }
 
@@ -127,7 +128,70 @@ class FilmesDB {
   	return $filmes;
   }
   
+  function excluirFilme($id){
+  	$sessao_db = new SessaoDB();
+  	if ($sessao_db->excluiSessaoPorFilme($id)){
+  		$banco = new Banco();
+  		$banco = $banco->getPdoConn();
+  		$banco->beginTransaction();
+  			
+  		$stmt = $banco->prepare("DELETE FROM filmes WHERE id = :id");
+  		
+  		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+  			
+  		if (!$stmt->execute()) {
+  			$banco->rollBack();
+  			echo '{msg : "Erro 1"}';
+  			exit(0);
+  		}
+  		
+  		$banco->commit();
+  		SessaoSite::setMensagem(array('tipo' => 'success', 'msg' => 'Filme excluído com sucesso!'));
+  		return TRUE;
+  	}
+  }
 
+  function atualizaFilme($id, $titulo, $data_estreia, $data_termino, $genero, $cartaz, $duracao, $ator_principal, $atriz_principal, $ator_coadjuvante, $atriz_coadjuvante){
+  	$banco = new Banco();
+  	$banco = $banco->getPdoConn();
+  	$banco->beginTransaction();
+  	 
+  	$stmt = $banco->prepare("
+  			UPDATE filmes
+  			SET titulo = :titulo, 
+  			data_estreia = STR_TO_DATE(:data_estreia, '%d/%m/%Y'), 
+  			data_termino = STR_TO_DATE(:data_termino, '%d/%m/%Y'),
+  			genero_id = :genero_id, 
+  			cartaz = :cartaz, 
+  			duracao = :duracao, 
+  			ator_principal = :ator_principal,
+  			atriz_principal = :atriz_principal, 
+  			ator_coadjuvante = :ator_coadjuvante, 
+  			atriz_coadjuvante = :atriz_coadjuvante WHERE id = :id");
+  	
+  	$stmt->bindValue(':titulo', $titulo, PDO::PARAM_STR);
+  	$stmt->bindValue(':data_estreia', $data_estreia, PDO::PARAM_STR);
+  	$stmt->bindValue(':data_termino', $data_termino, PDO::PARAM_STR);
+  	$stmt->bindValue(':genero_id', $genero, PDO::PARAM_INT);
+  	$stmt->bindValue(':cartaz', $cartaz, PDO::PARAM_STR);
+  	$stmt->bindValue(':duracao', $duracao, PDO::PARAM_STR);
+  	$stmt->bindValue(':ator_principal', $ator_principal, PDO::PARAM_STR);
+  	$stmt->bindValue(':atriz_principal', $atriz_principal, PDO::PARAM_STR);
+  	$stmt->bindValue(':ator_coadjuvante', $ator_coadjuvante, PDO::PARAM_STR);
+  	$stmt->bindValue(':atriz_coadjuvante', $atriz_coadjuvante, PDO::PARAM_STR);
+  	$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+  	 
+  	if (!$stmt->execute()) {
+  		$banco->rollBack();
+  		echo '{msg : "Erro 1"}';
+  		exit(0);
+  	}
+
+  	$banco->commit();
+  	SessaoSite::setMensagem(array('tipo' => 'success', 'msg' => 'Filme alterado com sucesso!'));
+  	return TRUE;
+  }
+  
   function populaFilme($linha){
     return new Filme($linha['id'], $linha['titulo'], $linha['data_estreia'], 
       $linha['data_termino'], $linha['genero_id'], $linha['cartaz'], 

@@ -64,6 +64,7 @@ class UsuarioDB {
 		
 		$ultimo_id = $banco->lastInsertId();
 		$banco->commit();
+		SessaoSite::setMensagem(array('tipo' => 'success', 'msg' => 'Usuário criado com sucesso!'));
 		return $ultimo_id;
 	}
 	
@@ -84,6 +85,55 @@ class UsuarioDB {
 		
 		SessaoSite::registrarSessao($usuario_logado);
 		
+		return TRUE;
+	}
+	
+	function editaUsuario($usuario){
+		$banco = new Banco();
+		$banco = $banco->getPdoConn();
+		$banco->beginTransaction();
+			
+		$stmt = $banco->prepare("
+  			UPDATE usuarios
+  			SET nome = :nome,
+				papel_id = :papel_id,
+				login = :login,
+				senha = :senha WHERE id = :id");
+		
+		$stmt->bindValue(':nome', $usuario->getNome(), PDO::PARAM_STR);
+		$stmt->bindValue(':papel_id', $usuario->getPapel(), PDO::PARAM_INT);
+		$stmt->bindValue(':login', $usuario->getLogin(), PDO::PARAM_STR);
+		$stmt->bindValue(':senha', $usuario->getSenha(), PDO::PARAM_STR);
+		$stmt->bindValue(':id', $usuario->getId(), PDO::PARAM_INT);
+			
+		if (!$stmt->execute()) {
+			$banco->rollBack();
+			echo '{msg : "Erro 1"}';
+			exit(0);
+		}
+		
+		$banco->commit();
+		SessaoSite::setMensagem(array('tipo' => 'success', 'msg' => 'Usuário alterado com sucesso!'));
+		return $usuario->getId();
+	}
+	
+	function excluirUsuario($id){
+		$banco = new Banco();
+		$banco = $banco->getPdoConn();
+		$banco->beginTransaction();
+			
+		$stmt = $banco->prepare("DELETE FROM usuarios WHERE id = :id");
+		
+		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+			
+		if (!$stmt->execute()) {
+			$banco->rollBack();
+			echo '{msg : "Erro 1"}';
+			exit(0);
+		}
+		
+		$banco->commit();
+		SessaoSite::setMensagem(array('tipo' => 'success', 'msg' => 'Usuário deletado com sucesso!'));
 		return TRUE;
 	}
 	

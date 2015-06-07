@@ -5,6 +5,7 @@
 	    $('#usuarios').addClass('active');
 	})
 </script>
+<?php include('mensagem.php'); ?>
 <h2>Usuários</h2>
 <a class="btn btn-primary" href="novo_usuario.php" role="button">Novo Usuário</a>
 <?php 
@@ -16,6 +17,8 @@
   	<th>Nome</th>
   	<th>Papel</th>
   	<th>Login</th>
+  	<th></th>
+  	<th></th>
   </thead>
   <tbody>
   <?php 
@@ -31,6 +34,15 @@
   		echo "</td>";
   		echo "<td>";
   		echo $usuarios[$i]->getLogin();
+  		echo "</td>";
+  		echo "<td>";
+  		echo "<a href='editar_usuario.php?id=".$usuarios[$i]->getId()."' class='btn btn-primary'>Editar</a>";
+  		echo "</td>";
+  		echo "<td>";
+  		echo "<form method='POST' action='funcoes_formularios/excluir_usuario.php'>";
+  		echo "<input type='hidden' value='".$usuarios[$i]->getId()."' name='id_usuario' id='id_usuario'>";
+  		echo "<button type='submit' class='btn btn-primary'>Excluir</button>";
+  		echo "</form>";
   		echo "</td>";
   		echo "</tr>";
   	}

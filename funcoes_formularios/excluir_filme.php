@@ -11,9 +11,13 @@ function __autoload($arquivo)
 	}
 }
 
-$usuario_db = new UsuarioDB();
+$filme_db = new FilmesDB();
+$sessao_db = new SessaoDB();
 
-$id = $usuario_db->insereUsuario($_POST['nome'], $_POST['papel_id'], $_POST['login'], $_POST['senha']);
+if (!$sessao_db->jaPassou((int)$_POST['id_filme']) && $filme_db->excluirFilme((int)$_POST['id_filme'])){
+	unlink("../imagens/".$_POST['cartaz']);
+	header('location:../filmes.php');
+}
+header('location:../filmes.php');
 
-header('location:../visualiza_usuario.php?id='.$id);
 ?>

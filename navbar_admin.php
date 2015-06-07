@@ -26,7 +26,7 @@ $(document).ready(function () {
         <li><a href="#">Olá, <?php echo SessaoSite::getUsuario()->getNome(); ?></a></li>
         <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="caret"></span></a>
         	<ul class="dropdown-menu" role="menu">
-            <li><a href="#">Editar perfil<span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true"></span></a></li>
+            <li><a href="editar_usuario.php?id=<?php echo SessaoSite::getUsuario()->getId(); ?>">Editar perfil<span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true"></span></a></li>
             <li class="divider"></li>
             <li><a href="funcoes_formularios/logout.php">Logout<span class="glyphicon glyphicon-off pull-right" aria-hidden="true"></span></a></li>
           </ul>

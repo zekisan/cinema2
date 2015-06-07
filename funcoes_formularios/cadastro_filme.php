@@ -11,16 +11,19 @@ function __autoload($arquivo)
 	}
 }
 
-$cartaz = fopen($_FILES['cartaz']['tmp_name'], 'r');
-$data = fread($cartaz, filesize($_FILES['cartaz']['tmp_name']));
-$data = addslashes($data);
-fclose($cartaz);
+$arqError = $_FILES['cartaz']['error'];
+if (!empty($_FILES) && $arqError == 0) {
+	$arqTemp = $_FILES['cartaz']['tmp_name'];
+	$arqName = $_FILES['cartaz']['name'];
+	$pasta = '../imagens/';
+	$updload = move_uploaded_file($arqTemp, $pasta.$arqName);
 
-$filmes_db = new FilmesDB();
-
-$id = $filmes_db->cadastraFilme($_POST['titulo'], $_POST['data_estreia'], $_POST['data_termino'],
-  $_POST['genero'], $data, $_POST['duracao'], $_POST['ator_principal'],
-  $_POST['atriz_principal'], $_POST['ator_coadjuvante'], $_POST['atriz_coadjuvante']);
-
-header('location:../visualiza_filme.php?id='.$id);
+	$filmes_db = new FilmesDB();
+	
+	$id = $filmes_db->cadastraFilme($_POST['titulo'], $_POST['data_estreia'], $_POST['data_termino'],
+			$_POST['genero'], $arqName, $_POST['duracao'], $_POST['ator_principal'],
+			$_POST['atriz_principal'], $_POST['ator_coadjuvante'], $_POST['atriz_coadjuvante']);
+	
+	header('location:../visualiza_filme.php?id='.$id);
+}
 ?>

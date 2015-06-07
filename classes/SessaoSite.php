@@ -32,6 +32,26 @@ class SessaoSite {
 		}
 	}
 	
+	static public function setMensagem($msg) {
+		SessaoSite::iniciaSessao();
+		$_SESSION['mensagem'] = $msg;
+	}
+	
+	static public function deletaMensagem() {
+		SessaoSite::iniciaSessao();
+		unset($_SESSION['mensagem']);
+	}
+	
+	static public function possuiMensagem() {
+		SessaoSite::iniciaSessao();
+		return isset($_SESSION['mensagem']);
+	}
+	
+	static public function getMensagem() {
+		SessaoSite::iniciaSessao();
+		return $_SESSION['mensagem'];
+	}
+	
 	static private function sessao_foi_iniciada() {
 		if ( php_sapi_name() !== 'cli' ) {
 			if ( version_compare(phpversion(), '5.4.0', '>=') ) {
